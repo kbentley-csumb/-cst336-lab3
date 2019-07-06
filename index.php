@@ -11,7 +11,7 @@
     <body>
 
     <h1> Sign Up </h1>
-
+    <form method="post" action="welcome.html">
     First Name: <input type="text" name="fName"><br>
     Last Name:  <input type="text" name="lName"><br>
     Gender:     <input type="radio" name="gender" value="m"> Male
@@ -32,11 +32,13 @@
 
     Select a County: <select id="county"></select><br><br>
 
-    Desired Username: <input type="text" id="username" name="username"><br>
+    Desired Username: <input type="text" id="username" name="username">
+    <span id="usernameError"></span><br>
     Desired Password: <input type="password" id="password" name="password"><br>
     Repeat Password:  <input type="password" id="passwordAgain"><br>
 
     <input type="submit" value="Sign Up!">
+    </form>
 <script>
 //alert(  $("#zip").val()  );
     
@@ -92,7 +94,25 @@
                 }
             } 
         });//ajax
-    })
+    });
+    $("#username").change(function() {
+        $.ajax({
+            method: "GET",
+            url: "http://cst336.herokuapp.com/projects/api/usernamesAPI.php",
+            dataType: "json",
+            data: {  "username" : $("#username").val() } ,
+            success: function(result,status) {
+                if(result.available) {
+                    $("#usernameError").html("Username is available!");
+                    $("#usernameError").css("color","green");
+                }
+                else{
+                    $("#usernameError").html("Username is unavailable!");
+                    $("#usernameError").css("color","red");
+                }
+            } 
+        });//ajax
+    });
 
 </script>
     </body>
