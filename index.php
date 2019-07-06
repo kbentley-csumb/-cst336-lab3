@@ -11,7 +11,7 @@
     <body>
 
     <h1> Sign Up </h1>
-    <form method="post" action="welcome.html">
+    <form id="signupForm" method="post" action="welcome.html">
     First Name: <input type="text" name="fName"><br>
     Last Name:  <input type="text" name="lName"><br>
     Gender:     <input type="radio" name="gender" value="m"> Male
@@ -34,14 +34,28 @@
 
     Desired Username: <input type="text" id="username" name="username">
     <span id="usernameError"></span><br>
-    Desired Password: <input type="password" id="password" name="password"><br>
-    Repeat Password:  <input type="password" id="passwordAgain"><br>
+    Desired Password: <input type="password" id="password" name="password"><span id="passwordError"></span><br />
+    Repeat Password:  <input type="password" id="passwordAgain">
+    <span id="passwordAgainError"></span><br /> <br />
 
     <input type="submit" value="Sign Up!">
     </form>
 <script>
-//alert(  $("#zip").val()  );
+    var usernameAvailable = false;
     
+    $.ajax({
+            method: "GET",
+            url: "http://cst336.herokuapp.com/projects/api/state_abbrAPI.php",
+            dataType: "json",
+            data: {  } ,
+            success: function(result,status) {
+                $("#state").html("<option> Select One </option>");
+                for(let i=0;i<result.length;i++) {
+                    $("#state").append("<option value='" + result[i].usps + "'>" + result[i].state + "</option>");
+                }
+            } 
+        });//ajax
+
     //Displaying City from API after typing a zip code
     $("#zip").on("change",function() {
         //alert(  $("#zip").val()  );
@@ -105,15 +119,53 @@
                 if(result.available) {
                     $("#usernameError").html("Username is available!");
                     $("#usernameError").css("color","green");
+                    usernameAvailable = true;
                 }
                 else{
                     $("#usernameError").html("Username is unavailable!");
                     $("#usernameError").css("color","red");
+                    usernameAvailable = false;
                 }
             } 
         });//ajax
     });
+    $("#signupForm").on("submit",function(event) {
+        //alert("submitting form");
+        if(!isFormValid()) {
+            event.preventDefault();
+        }
+        
+    });
 
+    function isFormValid() {
+        isValid = true;
+        if(!usernameAvailable) {
+            isValid = false;
+        }
+
+        if($("#username").val().length==0) {
+            isValid = false;
+            $("#usernameError").html("Username is required.");
+        }
+
+        if($("#password").val() != $("#passwordAgain").val()) {
+            $("#passwordAgainError").html("Password Mismatch!");
+            isValid = false;
+        }
+        else {
+            $("#passwordAgainError").html("");
+        }
+
+        if($("#password").val().length<6) {
+            isValid = false;
+            $("#passwordError").html("A password with at least 6 characters is required.");
+        }
+        else {
+            $("#passwordError").html("");
+        }
+
+        return isValid;
+    }
 </script>
     </body>
 
