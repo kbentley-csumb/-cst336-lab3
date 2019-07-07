@@ -2,45 +2,89 @@
 <html>
     <head>
         <title>Sign Up Page</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link  href="css/styles.css" rel="stylesheet" type="text/css" />
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     </head>
-    <body>
-
+    <body id="bootstrap-overrides">
+    <div class="container">
     <h1> Sign Up </h1>
     <form id="signupForm" method="post" action="welcome.html">
-    First Name: <input type="text" name="fName"><br>
-    Last Name:  <input type="text" name="lName"><br>
-    Gender:     <input type="radio" name="gender" value="m"> Male
-                <input type="radio" name="gender" value="f"> Female <br><br>
+    <fieldset>
+        <legend>Your Information</legend>
+    <div class="form-group">
+        <label for="fName">First Name</label>
+        <input class="form-control" type="text" name="fName" placeholder="First Name">
+    </div>
+
+    <div class="form-group">
+        <label for="lName">First Name</label>
+        <input class="form-control" type="text" name="lName" placeholder="Last Name">
+    </div>
+    <div class="radio">
+        <label>
+            <input type="radio" name="gender" value="m">
+            Male
+        </label>
+        <label>
+            <input type="radio" name="gender" value="f">
+            Female
+        </label>
+    </div>
+    <div class="form-group">
+        <label for="zip">Zip Code</label>
+        <input id="zip" class="form-control input-sm" type="text" name="zip" placeholder="Zip Code">
+        <small id="zipError"></small>
+    </div>
+    </fieldset>
+
+    City: <span id="city"></span><br/>
+    Latitude: <span id="latitude"></span><br/>
+    Longitude: <span id="longitude"></span><br/>
     
-    Zip Code:   <input type="text" name="zip" id="zip"><br>
-    City:       <span id="city"></span><br>
-    Latitude:   <span id="latitude"></span><br>
-    Longitude:  <span id="longitude"></span><br><br>
+    <fieldset>
+        <legend> Detailed Location </legend>
+        <div class="form-group">
+            <label for="state">Select Your State</label>
+            <select class="form-control" id="state" placeholder="Loading States...">
+            
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="county">Select Your County</label>
+            <select class="form-control" id="county" placeholder="">
 
-    State:
-    <select id="state" name="state">
-        <option value="">Select One</option>
-        <option value="ca"> California</option>
-        <option value="ny"> New York</option>
-        <option value="tx"> Texas</option>
-    </select><br />
+            </select>
+        </div>
+    </fieldset>
 
-    Select a County: <select id="county"></select><br><br>
+    <fieldset>
+        <legend> Login Information </legend>
+        <div class="form-group">
+            <label for="username">Desired Username</label>
+            <input class="form-control" type="text" name="username" id="username" placeholder="Username">
+            <small id="usernameError"></small>
+        </div>
 
-    Desired Username: <input type="text" id="username" name="username">
-    <span id="usernameError"></span><br>
-    Desired Password: <input type="password" id="password" name="password"><span id="passwordError"></span><br />
-    Repeat Password:  <input type="password" id="passwordAgain">
-    <span id="passwordAgainError"></span><br /> <br />
+        <div class="form-group">
+            <label for="username">Password</label>
+            <input class="form-control" type="password" name="password" id="password" placeholder="Password">
+            <small id="passwordError"></small>
+        </div>
+        <div class="form-group">
+            <label for="username">Repeat Password</label>
+            <input class="form-control" type="password" name="passwordAgain" id="passwordAgain" placeholder="Password">
+            <small id="passwordAgainError"></small>
+        </div>
 
-    <input type="submit" value="Sign Up!">
+    </fieldset>
+    <input type="submit" class="btn btn-primary" value="Sign Up!">
     </form>
 <script>
+    $(document).ready(() => {
     var usernameAvailable = false;
     
     $.ajax({
@@ -67,8 +111,20 @@
             data: {  "zip" : $("#zip").val() } ,
             success: function(result,status) {
                 //alert(result);
-                $("#city").html(result.city);
-            } 
+                if(result==false) {
+                    $("#zipError").html("Invalid Zip Code");
+                    $("#zipError").attr("class","alert alert-danger")
+                }
+                else {
+                    $("#zipError").html("");
+                    $("#city").html(result.city);
+                    $("#zipError").attr("class","bg-primary text-white")
+                }
+            },
+            error: function(result,status) {
+                $("#zipError").html("Invalid Zip Code");
+            }
+            
         });//ajax
 
         $.ajax({
@@ -118,12 +174,13 @@
             success: function(result,status) {
                 if(result.available) {
                     $("#usernameError").html("Username is available!");
-                    $("#usernameError").css("color","green");
+                    $("#usernameError").attr("class","alert alert-success");
+
                     usernameAvailable = true;
                 }
                 else{
                     $("#usernameError").html("Username is unavailable!");
-                    $("#usernameError").css("color","red");
+                    $("#usernameError").attr("class","alert alert-danger");
                     usernameAvailable = false;
                 }
             } 
@@ -146,27 +203,34 @@
         if($("#username").val().length==0) {
             isValid = false;
             $("#usernameError").html("Username is required.");
+            $("#usernameError").attr("class","alert alert-danger");
         }
 
         if($("#password").val() != $("#passwordAgain").val()) {
             $("#passwordAgainError").html("Password Mismatch!");
+            $("#passwordAgainError").attr("class","alert alert-danger");
             isValid = false;
         }
         else {
             $("#passwordAgainError").html("");
+            $("#passwordAgainError").attr("class","");
         }
 
         if($("#password").val().length<6) {
             isValid = false;
             $("#passwordError").html("A password with at least 6 characters is required.");
+            $("#passwordError").attr("class","alert alert-danger");
         }
         else {
             $("#passwordError").html("");
+            $("#passwordError").attr("class","");
         }
 
         return isValid;
     }
+    });
 </script>
+</div>
     </body>
 
 </html>
