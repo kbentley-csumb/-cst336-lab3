@@ -120,7 +120,7 @@ $(document).ready(() => {
         }
 
         if($("#password").val() != $("#passwordAgain").val()) {
-            $("#passwordAgainError").html("Password Mismatch!");
+            $("#passwordAgainError").html("Retype Password");
             $("#passwordAgainError").attr("class","alert alert-danger");
             isValid = false;
         }
