@@ -3,7 +3,7 @@ $(document).ready(() => {
     
     $.ajax({
             method: "GET",
-            url: "http://cst336.herokuapp.com/projects/api/state_abbrAPI.php",
+            url: "https://cst336.herokuapp.com/projects/api/state_abbrAPI.php",
             dataType: "json",
             data: {  } ,
             success: function(result,status) {
@@ -20,7 +20,7 @@ $(document).ready(() => {
         
         $.ajax({
             method: "GET",
-            url: "http://cst336.herokuapp.com/projects/api/cityInfoAPI.php",
+            url: "https://cst336.herokuapp.com/projects/api/cityInfoAPI.php",
             dataType: "json",
             data: {  "zip" : $("#zip").val() } ,
             success: function(result,status) {
@@ -41,7 +41,7 @@ $(document).ready(() => {
 
         $.ajax({
             method: "GET",
-            url: "http://cst336.herokuapp.com/projects/api/cityInfoAPI.php",
+            url: "https://cst336.herokuapp.com/projects/api/cityInfoAPI.php",
             dataType: "json",
             data: {  "zip" : $("#zip").val() } ,
             success: function(result,status) {
@@ -52,7 +52,7 @@ $(document).ready(() => {
 
         $.ajax({
             method: "GET",
-            url: "http://cst336.herokuapp.com/projects/api/cityInfoAPI.php",
+            url: "https://cst336.herokuapp.com/projects/api/cityInfoAPI.php",
             dataType: "json",
             data: {  "zip" : $("#zip").val() } ,
             success: function(result,status) {
@@ -66,7 +66,7 @@ $(document).ready(() => {
     $("#state").on("change",function() {
         $.ajax({
             method: "GET",
-            url: "http://cst336.herokuapp.com/projects/api/countyListAPI.php",
+            url: "https://cst336.herokuapp.com/projects/api/countyListAPI.php",
             dataType: "json",
             data: {  "state" : $("#state").val() } ,
             success: function(result,status) {
@@ -81,7 +81,7 @@ $(document).ready(() => {
     $("#username").change(function() {
         $.ajax({
             method: "GET",
-            url: "http://cst336.herokuapp.com/projects/api/usernamesAPI.php",
+            url: "https://cst336.herokuapp.com/projects/api/usernamesAPI.php",
             dataType: "json",
             data: {  "username" : $("#username").val() } ,
             success: function(result,status) {
